@@ -42,6 +42,17 @@ export default class SharePlugin extends Plugin {
         this.addRibbonIcon('share', 'Share', async () => {
             await openView(this.app.workspace, ViewType)
         })
+
+        if (this.settings.isFirstRun) {
+            this.settings.isFirstRun = false
+
+            const modal = new ModalOnBoarding(this.app)
+            modal.open()
+
+            await openView(this.app.workspace, ViewType)
+
+            await this.saveSettings()
+        }
     }
 
     onunload() {
@@ -54,15 +65,6 @@ export default class SharePlugin extends Plugin {
         if (!this.settings) {
             this.settings = DEFAULT_SETTINGS
         }
-
-        if (!this.settings.isFirstRun) {
-            return
-        }
-
-        this.settings.isFirstRun = false
-
-        const modal = new ModalOnBoarding(this.app)
-        modal.open()
 
         await this.saveSettings()
     }

@@ -17,9 +17,9 @@ export const ViewType = 'obsidian-share-view'
 
 export class CanvasView extends ItemView {
     private canvas: fabric.Canvas
-    private paddingPercent = 0.05
-    private canvasWidth = 1920*0.8
-    private canvasHeight = 1400*0.8
+    private paddingPercent = 0.07
+    private canvasWidth = 1920
+    private canvasHeight = 1400
     constructor(leaf: WorkspaceLeaf) {
         super(leaf)
     }
@@ -100,7 +100,7 @@ export class CanvasView extends ItemView {
         const card = new fabric.Rect({
             width: rectWidth,
             height: rectHeight,
-            fill: 'rgba(0,0,0,0.5)',
+            fill: 'rgba(0,0,0,0.4)',
             selectable: false,
             rx: this.canvasWidth * 0.02,
             ry: this.canvasWidth * 0.02,
@@ -117,7 +117,7 @@ export class CanvasView extends ItemView {
 
     private createTextNode(rectWidth: number, textContent: string, subText?: string) {
         // the text
-        const textWidth = rectWidth * 0.85
+        const textWidth = rectWidth * 0.80
         const text = new fabric.Textbox(textContent, {
             width: textWidth,
             fill: 'white',

@@ -1,6 +1,5 @@
 import { App, PluginSettingTab, Setting } from 'obsidian'
 import OpenGatePlugin from './main'
-import { ModalEditGate } from './ModalEditGate'
 
 export class SettingTab extends PluginSettingTab {
     plugin: OpenGatePlugin
@@ -18,41 +17,13 @@ export class SettingTab extends PluginSettingTab {
 
         const settingContainerEl = containerEl.createDiv('setting-container')
 
-        for (const gateId in this.plugin.settings.gates) {
-            const gate = this.plugin.settings.gates[gateId]
-            const gateEl = settingContainerEl.createEl('div', {
-                attr: {
-                    'data-gate-id': gate.id
-                }
-            })
-
-            new Setting(gateEl)
-                .setName(gate.title)
-                .setDesc(gate.url)
-                .addButton((button) => {
-                    button.setButtonText('Delete').onClick(async () => {
-                        gateEl.remove()
-                    })
-                })
-                .addButton((button) => {
-                    button.setButtonText('Edit').onClick(() => {})
-                })
-        }
-
         containerEl.createEl('h3', { text: 'Help' })
 
         containerEl.createEl('small', {
             attr: {
-                style: 'display: block; margin-bottom: 5px'
+                style: 'display: block; margin-bottom: 10px'
             },
-            text: 'When delete or edit a gate, you need to reload Obsidian to see the changes.'
-        })
-
-        containerEl.createEl('small', {
-            attr: {
-                style: 'display: block; margin-bottom: 1em;'
-            },
-            text: `To reload Obsidian, you can use the menu "view -> Force reload" or "Reload App" in the command palette.`
+            text: 'This product is free, because I am passionate about it and use it every day. I also do many other plugins. So follow me for more updates.'
         })
 
         new Setting(containerEl)

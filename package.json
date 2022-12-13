@@ -1,7 +1,7 @@
 {
     "name": "obsidian-share",
     "version": "1.0.4",
-    "description": "Embed any website to Obsidian, from now all, you have anything you need in one place.",
+    "description": "Generate gradient images from your Obsidian notes",
     "main": "main.js",
     "scripts": {
         "dev": "node esbuild.config.mjs",
