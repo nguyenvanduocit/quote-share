@@ -6,10 +6,12 @@ import { openView } from './fns/openView'
 
 interface PluginSetting {
     isFirstRun: boolean
+    backgroundIndex: number
 }
 
 const DEFAULT_SETTINGS: PluginSetting = {
-    isFirstRun: true
+    isFirstRun: true,
+    backgroundIndex: 0
 }
 
 export default class SharePlugin extends Plugin {
@@ -20,7 +22,7 @@ export default class SharePlugin extends Plugin {
         this.addSettingTab(new SettingTab(this.app, this))
 
         this.registerView(ViewType, (leaf) => {
-            return new CanvasView(leaf)
+            return new CanvasView(leaf, this)
         })
 
         // add editor commands
@@ -64,6 +66,10 @@ export default class SharePlugin extends Plugin {
 
         if (!this.settings) {
             this.settings = DEFAULT_SETTINGS
+        }
+
+        if (this.settings.backgroundIndex === undefined) {
+            this.settings.backgroundIndex = DEFAULT_SETTINGS.backgroundIndex
         }
 
         await this.saveSettings()
