@@ -44,7 +44,7 @@ export class CanvasView extends ItemView {
       new Notice('Copied to clipboard')
     })
 
-    controllerContainer.createEl('button', {
+    /*controllerContainer.createEl('button', {
       text: 'Drag to share',
       attr: {
         id: 'drag-to-share',
@@ -55,7 +55,7 @@ export class CanvasView extends ItemView {
       const img = document.createElement('img')
       img.src = this.canvas.toDataURL()
       e.dataTransfer?.setDragImage(img, 0, 0)
-    })
+    })*/
 
     const canvasEl = this.contentEl.createEl('canvas', {
       attr: {id: 'canvas'}
