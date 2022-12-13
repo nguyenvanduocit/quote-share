@@ -18,11 +18,28 @@ const backgrounds = [
                 offset: 1
             }
         ]
+    },
+    // background-color: #0093E9;
+    // background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+    {
+        type: 'linear',
+        coords:{},
+        colorStops: [
+            {
+                color: '#0093E9',
+                offset: 0
+            },
+            {
+                color: '#80D0C7',
+                offset: 1
+            }
+        ]
     }
 ]
 
 export const createBackground = (width: number, height: number) => {
-    const background = backgrounds[0]
+    // get random background
+    const background = backgrounds[Math.floor(Math.random() * backgrounds.length)]
     background.coords ={x1:0, y1:0, x2: width, y2: height}
 
     const grad = new fabric.Gradient(background)

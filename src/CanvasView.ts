@@ -57,6 +57,7 @@ export class CanvasView extends ItemView {
 
             const background = createBackground(this.canvasWidth, this.canvasHeight)
             this.canvas.add(background)
+            this.canvas.sendToBack(background)
         })
 
         controllerContainer.createEl('button', {
@@ -99,7 +100,7 @@ export class CanvasView extends ItemView {
         const card = new fabric.Rect({
             width: rectWidth,
             height: rectHeight,
-            fill: 'rgba(0,0,0,0.3)',
+            fill: 'rgba(0,0,0,0.5)',
             selectable: false,
             rx: this.canvasWidth * 0.02,
             ry: this.canvasWidth * 0.02,
