@@ -20,14 +20,14 @@ export default class SharePlugin extends Plugin {
         this.addSettingTab(new SettingTab(this.app, this))
 
         this.registerView(ViewType, (leaf) => {
-            return new CanvasView(leaf, this)
+            return new CanvasView(leaf)
         })
 
         // add editor commands
         this.addCommand({
             id: 'share-selected-text',
             name: 'Share selected text',
-            callback: () => {
+            callback: async () => {
                 const editor =
                     this.app.workspace.getActiveViewOfType(MarkdownView)?.editor
                 const selection = editor?.getSelection()
@@ -35,13 +35,12 @@ export default class SharePlugin extends Plugin {
                     new Notice('Please select text to share.')
                     return
                 }
-                const text = editor?.getSelection()
-                openView(this.app.workspace, ViewType)
+                await openView(this.app.workspace, ViewType)
             }
         })
 
-        this.addRibbonIcon('share', 'Share', () => {
-            openView(this.app.workspace, ViewType)
+        this.addRibbonIcon('share', 'Share', async () => {
+            await openView(this.app.workspace, ViewType)
         })
     }
 

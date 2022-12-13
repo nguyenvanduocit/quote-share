@@ -6,11 +6,11 @@ export const getSelectedText = (workspace: Workspace): string => {
         return ''
     }
 
-    let view_mode = view.getMode() // "preview" or "source" (can also be "live" but I don't know when that happens)
+    let view_mode = view.getMode()
     switch (view_mode) {
         case 'source':
             if ('editor' in view) {
-                return view.editor.getSelection() // THIS IS THE SELECTED TEXT, use it as you wish.
+                return view.editor.getSelection().trim()
             }
             break
         case 'preview':

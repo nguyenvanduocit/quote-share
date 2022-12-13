@@ -11,16 +11,17 @@ import SharePlugin from './main'
 import { createBackground } from './fns/addBackground'
 import { dataURItoBlob } from './fns/dataUrlToBlob'
 import { getSelectedText } from './fns/getSelectedText'
+import { getCurrentFileName } from './fns/getCurrentFileName'
 
 export const ViewType = 'obsidian-share-view'
 
 export class CanvasView extends ItemView {
-    private plugin: SharePlugin
     private canvas: fabric.Canvas
-
-    constructor(leaf: WorkspaceLeaf, plugin: SharePlugin) {
+    private paddingPercent = 0.05
+    private canvasWidth = 1920*0.8
+    private canvasHeight = 1400*0.8
+    constructor(leaf: WorkspaceLeaf) {
         super(leaf)
-        this.plugin = plugin
     }
 
     onload(): void {
@@ -30,100 +31,124 @@ export class CanvasView extends ItemView {
         const controllerContainer = this.contentEl.createDiv({
             cls: 'controller-container'
         })
-        const saveButton = controllerContainer.createEl('button', {
-            text: 'Copy to clipboard'
+        controllerContainer.createEl('button', {
+            text: 'Copy to clipboard',
+            attr:{
+                id: 'copy-to-clipboard'
+            }
         })
-        saveButton.addEventListener('click', async () => {
-            open(this.canvas.toDataURL())
+        this.contentEl.on('click', "#copy-to-clipboard", async (e) => {
             const blob = dataURItoBlob(this.canvas.toDataURL())
             const item = new ClipboardItem({ 'image/png': blob })
             await navigator.clipboard.write([item])
             new Notice('Copied to clipboard')
         })
 
-        const canvasWidth = 1920/2
-        const canvasHeight = 1400/2
+        controllerContainer.createEl('button', {
+            text: 'Change background',
+            attr:{
+                id: 'change-background'
+            }
+        })
+        this.contentEl.on('click', "#change-background", async (e) => {
+            this.canvas.getObjects().filter((o) => o.name === 'background').forEach((o) => {
+                this.canvas.remove(o)
+            })
+
+            const background = createBackground(this.canvasWidth, this.canvasHeight)
+            this.canvas.add(background)
+        })
+
+        controllerContainer.createEl('button', {
+            text: 'Drag to share',
+            attr:{
+                id: 'drag-to-share',
+                draggable: 'true'
+            }
+        })
+        this.contentEl.on('dragstart', "#drag-to-share", async (e) => {
+            const img = document.createElement('img')
+            img.src = this.canvas.toDataURL()
+            e.dataTransfer?.setDragImage(img, 0, 0)
+        })
+
         const canvasEl = this.contentEl.createEl('canvas', {
-            attr: { id: 'canvas' }
+            attr: { id: 'canvas'}
+        })
+
+        this.contentEl.on('drop', "canvas", (e) => {
+            this.drawText(e.dataTransfer?.getData("Text").trim() || "")
+            this.canvas.renderAll()
         })
 
         this.canvas = new fabric.Canvas(canvasEl, {
-            width: canvasWidth,
-            height: canvasHeight,
-            selection: false
+            width: this.canvasWidth,
+            height: this.canvasHeight,
+            backgroundColor: '#000',
+            selection: false,
         })
 
-        const background = createBackground(canvasWidth, canvasHeight)
+        const background = createBackground(this.canvasWidth, this.canvasHeight)
         this.canvas.add(background)
 
         // the card
-        const paddingPercent = 0.05
-        const widthPadding = canvasWidth * paddingPercent
-        const heightPadding = canvasHeight * paddingPercent
-        const rectWidth = canvasWidth - widthPadding * 2
-        const rectHeight = canvasHeight - heightPadding * 2
-        const rect = new fabric.Rect({
+        const widthPadding = this.canvasWidth * this.paddingPercent
+        const heightPadding = this.canvasHeight * this.paddingPercent
+        const rectWidth = this.canvasWidth - widthPadding * 2
+        const rectHeight = this.canvasHeight - heightPadding * 2
+        const card = new fabric.Rect({
             width: rectWidth,
             height: rectHeight,
-            left: widthPadding,
-            top: heightPadding,
             fill: 'rgba(0,0,0,0.3)',
             selectable: false,
-            rx: canvasWidth * 0.02,
-            ry: canvasWidth * 0.02,
+            rx: this.canvasWidth * 0.02,
+            ry: this.canvasWidth * 0.02,
             shadow: new fabric.Shadow({
                 color: 'black',
                 blur: 20
             })
         })
+        this.canvas.centerObject(card)
+        this.canvas.add(card)
 
+        this.drawText("Drag text here")
+    }
+
+    private createTextNode(rectWidth: number, textContent: string, subText?: string) {
         // the text
-        const textContent = getSelectedText(this.app.workspace).trim()
-        const textWidth = rectWidth * 0.8
+        const textWidth = rectWidth * 0.85
         const text = new fabric.Textbox(textContent, {
             width: textWidth,
-            left: canvasWidth / 2 - textWidth / 2,
             fill: 'white',
             textAlign: 'center',
-            fontSize: 80
+            fontSize: 70,
         })
 
-        const height = text.calcTextHeight()
-        text.set({
-            top: canvasHeight / 2 - height / 2
-        })
-
-        // add vault name
-        // get active leaf
-        const activeLeaf = this.app.workspace.getActiveViewOfType(MarkdownView)
-        let fileName = activeLeaf?.file.name || this.plugin.app.vault.getName()
-        fileName = fileName.replace('.md', '')
-
-        const vaultName = new fabric.Textbox(`// ${fileName}`, {
+        const vaultName = new fabric.Textbox(`// ${subText}`, {
             width: textWidth,
-            left: canvasWidth / 2 - textWidth / 2,
-            top: text.height! + text.top! + 60,
+            left: text.left,
+            top: text.height! + text.top! + 50,
             fill: 'white',
             textAlign: 'center',
-            fontSize: 50
+            fontSize: 50,
         })
 
-        const textGroup = new fabric.Group([text, vaultName], {})
+        return new fabric.Group([text, vaultName], {selectable: false, name: 'mainText'})
+    }
 
-        // the group
-        const groupWidthPadding = rectWidth * 0.1
-        const groupHeightPadding = rectHeight * 0.1
-        const groupWidth = rectWidth + groupWidthPadding
-        const groupHeight = rectHeight + groupHeightPadding
-        const group = new fabric.Group([rect, textGroup], {
-            width: groupWidth,
-            height: groupHeight,
-            left: canvasWidth / 2 - groupWidth / 2,
-            top: canvasHeight / 2 - groupHeight / 2,
-            selectable: false
+    drawText(text: string) {
+        this.canvas.getObjects().filter((o) => o.name === 'mainText').forEach((o) => {
+            this.canvas.remove(o)
         })
 
-        this.canvas.add(group)
+
+        const textWidth = this.canvasWidth - this.canvasWidth * this.paddingPercent
+
+        const subText = getCurrentFileName(this.app)
+
+        const textGroup = this.createTextNode(textWidth, text, subText)
+        this.canvas.centerObject(textGroup)
+        this.canvas.add(textGroup)
     }
 
     onunload() {

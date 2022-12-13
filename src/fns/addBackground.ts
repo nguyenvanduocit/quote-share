@@ -1,14 +1,9 @@
 import { fabric } from 'fabric'
 
-export const createBackground = (width: number, height: number) => {
-    const grad = new fabric.Gradient({
+const backgrounds = [
+    {
         type: 'linear',
-        coords: {
-            x1: 0,
-            y1: 0,
-            x2: width,
-            y2: height
-        },
+        coords:{},
         colorStops: [
             {
                 color: 'rgb(166,111,213)',
@@ -23,9 +18,17 @@ export const createBackground = (width: number, height: number) => {
                 offset: 1
             }
         ]
-    })
+    }
+]
+
+export const createBackground = (width: number, height: number) => {
+    const background = backgrounds[0]
+    background.coords ={x1:0, y1:0, x2: width, y2: height}
+
+    const grad = new fabric.Gradient(background)
 
     return new fabric.Rect({
+        name: 'background',
         width: width,
         height: height,
         fill: grad,

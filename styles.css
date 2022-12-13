@@ -1,18 +1,5 @@
-@media (prefers-color-scheme: dark) {
-    :root {
-        --open-gate-background: #000;
-    }
-}
-
-@media (prefers-color-scheme: light) {
-    :root {
-        --open-gate-background: #fff;
-    }
-}
-
 .obsidian-share-view {
-    background-color: var(--open-gate-background);
-    padding: 0 !important;
+    background-color: var(--color-base-00);
     overflow: hidden !important;
 }
 
@@ -29,5 +16,8 @@
 }
 
 .controller-container {
-    margin: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
 }
