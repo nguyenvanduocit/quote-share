@@ -1,0 +1,33 @@
+@media (prefers-color-scheme: dark) {
+    :root {
+        --open-gate-background: #000;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --open-gate-background: #fff;
+    }
+}
+
+.obsidian-share-view {
+    background-color: var(--open-gate-background);
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+.obsidian-share-view canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+.canvas-container {
+    position: relative;
+    width: 100% !important;
+    height: auto !important;
+    box-sizing: border-box;
+}
+
+.controller-container {
+    margin: 20px;
+}
