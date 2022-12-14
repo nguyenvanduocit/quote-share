@@ -1,6 +1,6 @@
 {
     "name": "obsidian-share",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Generate gradient images from your Obsidian notes",
     "main": "main.js",
     "scripts": {
