@@ -55,6 +55,20 @@ export default class SharePlugin extends Plugin {
 
             await this.saveSettings()
         }
+
+        this.app.workspace.on("editor-menu", (menu, editor, view) => {
+            const onClick = async (isEmbed: boolean) => {
+                const view = await openView(this.app.workspace, ViewType)
+                view?.view.drawText(editor.getSelection())
+            }
+
+            menu.addItem((item) => {
+                item
+                  .setTitle("Share as gradient")
+                  .setIcon("links-coming-in")
+                  .onClick(() => onClick(false));
+            });
+        })
     }
 
     onunload() {

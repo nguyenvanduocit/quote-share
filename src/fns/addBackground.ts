@@ -107,20 +107,7 @@ export const backgrounds = [
             }
         ]
     },
-    {
-        css: 'background-image: linear-gradient( 108.7deg,  rgba(34,219,231,1) -0.9%, rgba(52,118,246,1) 88.7% );',
-        type: 'linear',
-        coords: { x1: 0, y1: 0, x2: width, y2: height },
-        colorStops: [
-            {
-                color: 'rgba(34,219,231,1)',
-                offset: 0
-            },{
-                color: 'rgba(52,118,246,1)',
-                offset: 0.887
-            }
-        ]
-    },
+
     {
         css: 'background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,229,168,1) 0%, rgba(251,174,222,1) 100.7% );',
         type: 'radial',

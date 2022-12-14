@@ -21,3 +21,9 @@
     justify-content: flex-start;
     gap: 10px;
 }
+
+.gradients {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}

@@ -14,7 +14,7 @@ export const ViewType = 'obsidian-share-view'
 
 export class CanvasView extends ItemView {
   private canvas: fabric.Canvas
-  private paddingPercent = 0.07
+  private paddingPercent = 0.08
   private canvasWidth = 1920
   private canvasHeight = 1400
     private plugin: SharePlugin
@@ -32,7 +32,7 @@ export class CanvasView extends ItemView {
       cls: 'controller-container'
     })
     controllerContainer.createEl('button', {
-      text: 'Copy to clipboard',
+      text: 'Copy',
       attr: {
         id: 'copy-to-clipboard'
       }
@@ -77,20 +77,21 @@ export class CanvasView extends ItemView {
 
     // the card
     const widthPadding = this.canvasWidth * this.paddingPercent
-    const heightPadding = this.canvasHeight * this.paddingPercent
     const rectWidth = this.canvasWidth - widthPadding * 2
-    const rectHeight = this.canvasHeight - heightPadding * 2
+    const rectHeight = this.canvasHeight - widthPadding * 2
     const card = new fabric.Rect({
       width: rectWidth,
       height: rectHeight,
-      fill: 'rgba(0,0,0,0.4)',
+      fill: 'rgba(0,0,0,0.45)',
       selectable: false,
       rx: this.canvasWidth * 0.02,
       ry: this.canvasWidth * 0.02,
       shadow: new fabric.Shadow({
-        color: 'black',
-        blur: 20
-      })
+        color: 'rgba(0,0,0,0.9)',
+        blur: 30
+      }),
+      strokeWidth: 2,
+      stroke: 'rgba(0,0,0,0.5)'
     })
     this.canvas.centerObject(card)
     this.canvas.add(card)
@@ -99,7 +100,7 @@ export class CanvasView extends ItemView {
 
     // gradient
 
-    const gradients = controllerContainer.createDiv({})
+    const gradients = controllerContainer.createDiv({ cls:"gradients" })
 
     backgrounds.forEach((background, index) => {
         gradients.createEl('button', {
@@ -113,7 +114,6 @@ export class CanvasView extends ItemView {
     })
 
       this.contentEl.on('click', '.change-background', async (e) => {
-          console.log(e.target)
           this.canvas
             .getObjects()
             .filter((o) => o.name === 'background')
@@ -143,7 +143,7 @@ export class CanvasView extends ItemView {
       width: textWidth,
       fill: 'white',
       textAlign: 'center',
-      fontSize: 70
+      fontSize: 80
     })
 
     const vaultName = new fabric.Textbox(`// ${subText}`, {
@@ -204,6 +204,6 @@ export class CanvasView extends ItemView {
   }
 
   getIcon(): string {
-    return 'globe'
+    return 'share'
   }
 }
