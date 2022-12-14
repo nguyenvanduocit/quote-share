@@ -123,7 +123,8 @@ export const backgrounds = [
             {
                 color: 'rgba(255,229,168,1)',
                 offset: 0
-            }, {
+            },
+            {
                 color: 'rgba(251,174,222,1)',
                 offset: 1
             }
@@ -132,7 +133,7 @@ export const backgrounds = [
 ]
 
 export const createBackground = (backgroundIndex: number) => {
-const background = backgrounds[backgroundIndex]
+    const background = backgrounds[backgroundIndex]
     const grad = new fabric.Gradient(background)
 
     return new fabric.Rect({

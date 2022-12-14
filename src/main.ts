@@ -3,6 +3,7 @@ import { SettingTab } from './SetingTab'
 import { ModalOnBoarding } from './ModalOnboarding'
 import { CanvasView, ViewType } from './CanvasView'
 import { openView } from './fns/openView'
+import { enqueue } from './queue'
 
 interface PluginSetting {
     isFirstRun: boolean
@@ -25,22 +26,6 @@ export default class SharePlugin extends Plugin {
             return new CanvasView(leaf, this)
         })
 
-        // add editor commands
-        this.addCommand({
-            id: 'share-selected-text',
-            name: 'Share selected text',
-            callback: async () => {
-                const editor =
-                    this.app.workspace.getActiveViewOfType(MarkdownView)?.editor
-                const selection = editor?.getSelection()
-                if (!selection) {
-                    new Notice('Please select text to share.')
-                    return
-                }
-                await openView(this.app.workspace, ViewType)
-            }
-        })
-
         this.addRibbonIcon('share', 'Share', async () => {
             await openView(this.app.workspace, ViewType)
         })
@@ -56,18 +41,34 @@ export default class SharePlugin extends Plugin {
             await this.saveSettings()
         }
 
-        this.app.workspace.on("editor-menu", (menu, editor, view) => {
+        this.app.workspace.on('editor-menu', (menu, editor, view) => {
             const onClick = async (isEmbed: boolean) => {
-                const view = await openView(this.app.workspace, ViewType)
-                view?.view.drawText(editor.getSelection())
+                enqueue(editor.getSelection())
+                await openView(this.app.workspace, ViewType)
             }
 
             menu.addItem((item) => {
-                item
-                  .setTitle("Share as gradient")
-                  .setIcon("links-coming-in")
-                  .onClick(() => onClick(false));
-            });
+                item.setTitle('Share as gradient')
+                    .setIcon('links-coming-in')
+                    .onClick(() => onClick(false))
+            })
+        })
+
+        // add command
+        this.addCommand({
+            id: 'share-as-gradient',
+            name: 'Share as gradient',
+            callback: async () => {
+                const editor =
+                    this.app.workspace.getActiveViewOfType(MarkdownView)?.editor
+                const selection = editor?.getSelection()
+                if (!selection) {
+                    new Notice('Please select text to share.')
+                    return
+                }
+                enqueue(selection)
+                await openView(this.app.workspace, ViewType)
+            }
         })
     }
 
