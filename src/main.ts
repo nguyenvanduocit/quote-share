@@ -1,9 +1,11 @@
-import { MarkdownView, Notice, Plugin } from 'obsidian'
+import {addIcon, MarkdownView, Notice, Plugin} from 'obsidian'
 import { SettingTab } from './SetingTab'
 import { ModalOnBoarding } from './ModalOnboarding'
 import { CanvasView, ViewType } from './CanvasView'
 import { openView } from './fns/openView'
 import { enqueue } from './queue'
+// @ts-ignore-next-line
+import logo from './logo.svg'
 
 interface PluginSetting {
     isFirstRun: boolean
@@ -22,11 +24,13 @@ export default class SharePlugin extends Plugin {
         await this.loadSettings()
         this.addSettingTab(new SettingTab(this.app, this))
 
+        addIcon('obsidian-share', logo)
+
         this.registerView(ViewType, (leaf) => {
             return new CanvasView(leaf, this)
         })
 
-        this.addRibbonIcon('share', 'Share', async () => {
+        this.addRibbonIcon('obsidian-share', 'Share', async () => {
             await openView(this.app.workspace, ViewType)
         })
 

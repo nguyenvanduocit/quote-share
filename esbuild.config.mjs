@@ -39,6 +39,9 @@ esbuild
         logLevel: 'info',
         sourcemap: prod ? false : 'inline',
         treeShaking: true,
-        outfile: 'main.js'
+        outfile: 'main.js',
+      loader:{
+          '.svg': 'text'
+      }
     })
     .catch(() => process.exit(1))

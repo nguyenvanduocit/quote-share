@@ -215,6 +215,6 @@ export class CanvasView extends ItemView {
     }
 
     getIcon(): string {
-        return 'share'
+        return 'obsidian-share'
     }
 }
