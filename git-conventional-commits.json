@@ -5,12 +5,14 @@
       "fix",
       "perf",
       "refactor",
+      "reactor",
       "style",
       "test",
       "build",
       "ops",
       "docs",
-      "merge"
+      "merge",
+      "chore"
     ],
     "commitScopes": [],
     "releaseTagGlobPattern":  "[0-9]*.[0-9]*.[0-9]*"
@@ -21,7 +23,8 @@
       "feat",
       "fix",
       "perf",
-      "merge"
+      "merge",
+      "chore"
     ],
     "includeInvalidCommits": true,
     "commitScopes": [],
