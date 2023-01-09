@@ -1,6 +1,6 @@
 {
     "name": "quote-share",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Generate gradient images from your Obsidian notes",
     "main": "main.js",
     "scripts": {

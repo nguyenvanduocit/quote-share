@@ -1,7 +1,7 @@
 {
 	"id": "quote-share",
 	"name": "Quote Share",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"minAppVersion": "0.15.0",
 	"description": "With this plugin, you can easily generate beautiful gradient images from text and share them on social media.",
 	"author": "duocnv",
