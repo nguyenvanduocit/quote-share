@@ -13,7 +13,6 @@
     "author": "",
     "license": "MIT",
     "devDependencies": {
-        "@changesets/cli": "^2.26.0",
         "@types/chrome": "^0.0.203",
         "@types/fabric": "^4.5.14",
         "@types/node": "^16.11.6",
