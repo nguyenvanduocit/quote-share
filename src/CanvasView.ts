@@ -198,7 +198,7 @@ export class CanvasView extends ItemView {
     onPaneMenu(menu: Menu, source: string): void {
         super.onPaneMenu(menu, source)
         menu.addItem((item) => {
-            item.setTitle('support author')
+            item.setTitle('Help...')
             item.setIcon('globe')
             item.onClick(() => {
                 open('https://twitter.com/duocdev')
